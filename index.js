@@ -7,46 +7,55 @@
 // Sample Input : [1, 3, 2, 2, -4, -6, -2, 8];
 // Target Value = 4,
 
-// Output: First Combination For “4” : [ [1,3],[2,2],[-4,8],[-6,2] ];
-// Merge Into a single Array : [-6,-4,1,2,2,2,3,8];
+// Output: First Combination For “4” : [ [1,3],[2,2],[-4,8] ];
+// Merge Into a single Array : [-4,1,2,2,3,8];
 // Second Combination For “8” : [ [ 1,3,2,2], [8,-4,2,2],....,[n,n,n,n] ]
 
 let arr = [1, 3, 2, 2, -4, -6, -2, 8];
 
-// Sorted the array into ascending order
-arr = arr.sort((a, b) => a - b);
 let n = arr.length;
 let k = 4; //target
 
-let mat = []; //an empty array to hold the arrays of two values
-let merged = []; //an empty array to merge the integers into ascending order
-let l = 0;
-let r = n - 1;
+function PairEquelsToTHeTarget(arr, n, k) {
+  // Sorted the array into ascending order
+  arr = arr.sort((a, b) => a - b);
+  let mat = []; //an empty array to hold the arrays of two values
+  let merged = []; //an empty array to merge the integers into ascending order
+  let l = 0;
+  let r = n - 1;
 
-while (l < r) {
-  let ar = [];
-  let sum = arr[l] + arr[r];
+  while (l < r) {
+    let ar = [];
+    let sum = arr[l] + arr[r];
 
-  if (sum == k) {
-    ar.push(arr[l], arr[r]); // Add the pair of numbers to 'ar' array
-    merged.push(arr[l], arr[r]); // Add the pair of numbers to 'merged' array
-    r--; // Since we have collected the integers of this position, move the right pointer to the left
-    l++; // and left pointer to the right
-  } else if (sum > k) {
-    r--; // Decrease the right pointer to reduce the sum
-  } else {
-    l++; // Increase the left pointer to increase the sum
+    if (sum == k) {
+      ar.push(arr[l], arr[r]); // Add the pair of numbers to 'ar' array
+      merged.push(arr[l], arr[r]); // Add the pair of numbers to 'merged' array
+      r--; // Since we have collected the integers of this position, move the right pointer to the left
+      l++; // and left pointer to the right
+    } else if (sum > k) {
+      r--; // Decrease the right pointer to reduce the sum
+    } else {
+      l++; // Increase the left pointer to increase the sum
+    }
+    if (ar.length != 0) {
+      mat.push(ar); // Add the 'ar' array to 'mat' array if it contains any elements
+    }
   }
-  if (ar.length != 0) {
-    mat.push(ar); // Add the 'ar' array to 'mat' array if it contains any elements
-  }
+
+  // Sort the merged array in ascending order
+  merged = merged.sort((a, b) => a - b);
+
+  console.log(mat); // Output the arrays of two values whose sum is equal to 'k'
+  console.log(merged); // Output the merged sorted array
+  return merged;
 }
 
-// Sort the merged array in ascending order
-merged = merged.sort((a, b) => a - b);
+// PairEquelsToTHeTarget(arr, n, k)
 
-console.log(mat); // Output the arrays of two values whose sum is equal to 'k'
-console.log(merged); // Output the merged sorted array
+let merged = PairEquelsToTHeTarget(arr, n, k)
+
+// console.log("merged", merged)
 
 // A function which takes two arguments first is an merged and sorted array, second is the given target
 function CombinationOfDoubledTarget(array, target) {
@@ -81,5 +90,6 @@ const combinations = CombinationOfDoubledTarget(merged, k);
 console.log(combinations); // Output for the second Combination of doubled target
 
 // The above code defines the CombinationOfDoubledTarget function, which takes the merged sorted array and target as parameters.
-// It initializes an empty result array to store the combinations. The backtrack function performs the actual backtracking algorithm. 
+// It initializes an empty result array to store the combinations. The backtrack function performs the actual backtracking algorithm.
 // It takes a combination array to track the current combination, a start index to avoid duplicates, and currentSum to keep track of the sum.
+// The worst-case time complexity of this solution is exponential, O(2^n), where n is the size of the input array.
